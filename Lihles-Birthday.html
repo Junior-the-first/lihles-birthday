@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lihle's Birthday</title>
+
+  <style>
+    /* =========================
+       RESET / GLOBAL BASICS
+       ========================= */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Color variables for easy editing later */
+    :root {
+      --bg: #111111;
+      --bg-2: #1a1a1a;
+      --paper: #f4efe7;
+      --paper-2: #fffaf2;
+      --ink: #f5e9df;
+      --muted: #d0c3b8;
+      --accent: #f1d86a;
+      --pink: #e6bdd0;
+    }
+
+    /* Main page background */
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.04), transparent 18%),
+        radial-gradient(circle at 80% 10%, rgba(255,255,255,0.03), transparent 18%),
+        radial-gradient(circle at 50% 80%, rgba(255,255,255,0.02), transparent 22%),
+        linear-gradient(180deg, #161616 0%, #0f0f0f 100%);
+      overflow-x: hidden;
+    }
+
+    /* Subtle page texture */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.08;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mix-blend-mode: soft-light;
+    }
+
+    /* Main content wrapper */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* =========================
+       CORNER FILM STRIPS
+       ========================= */
+
+    /* Visible clipping area for each corner strip */
+    .film-clip {
+      position: absolute;
+      overflow: hidden;
+      width: 580px;
+      height: 260px;
+      z-index: 3;
+      pointer-events: none; /* makes sure strips don't block clicks */
+    }
+
+    .film-clip.top-left {
+      top: 0;
+      left: 0;
+    }
+
+    .film-clip.bottom-right {
+      bottom: 0;
+      right: 0;
+    }
+
+    /* The actual film strip */
+    .corner-film {
+      position: absolute;
+      width: 900px;
+      height: 135px;
+      border-radius: 10px;
+      overflow: hidden;
+      background: linear-gradient(180deg, #2b2b2b, #111);
+      box-shadow: 0 16px 28px rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    /* Position the top-left strip */
+    .film-clip.top-left .corner-film {
+      top: -10px;
+      left: -170px;
+      transform: rotate(-18deg);
+    }
+
+    /* Position the bottom-right strip */
+    .film-clip.bottom-right .corner-film {
+      bottom: -10px;
+      right: -170px;
+      transform: rotate(-18deg);
+    }
+
+    /* Film perforation holes */
+    .corner-film::before,
+    .corner-film::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 14px;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          transparent 0 14px,
+          rgba(255,255,255,0.92) 14px 24px
+        );
+      opacity: 0.9;
+      z-index: 2;
+    }
+
+    .corner-film::before { top: 0; }
+    .corner-film::after { bottom: 0; }
+
+    /* Track that moves the frames */
+    .film-track {
+      display: flex;
+      width: max-content;
+      gap: 12px;
+      padding: 22px 18px;
+    }
+
+    /* Top strip scroll direction */
+    .film-track.forward {
+      animation: reelMoveForward 55s linear infinite;
+    }
+
+    /* Bottom strip scroll direction */
+    .film-track.backward {
+      animation: reelMoveBackward 55s linear infinite;
+    }
+
+    /* Each frame in the film strip */
+    .film-frame {
+      width: 150px;
+      height: 88px;
+      border-radius: 4px;
+      overflow: hidden;
+      background: #333;
+      flex: 0 0 auto;
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.05);
+    }
+
+    .film-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(0.9) brightness(0.92);
+    }
+
+    /* Film strip movement */
+    @keyframes reelMoveForward {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    @keyframes reelMoveBackward {
+      from { transform: translateX(-50%); }
+      to { transform: translateX(0); }
+    }
+
+    /* =========================
+       CENTRAL HEADER
+       ========================= */
+    .header {
+      text-align: center;
+      margin: 0 auto;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -52%);
+      width: min(760px, 90%);
+      z-index: 20;
+    }
+
+    .header h1 {
+      font-family: "Brush Script MT", cursive;
+      font-size: 4rem;
+      color: #f3d4e2;
+      text-shadow: 0 4px 18px rgba(0,0,0,0.35);
+      transform: rotate(-1deg);
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      max-width: 780px;
+      margin: 0 auto;
+      line-height: 1.55;
+      font-size: 1.05rem;
+      color: #d6cbc2;
+    }
+
+    /* =========================
+       SCRAPBOOK AREA
+       ========================= */
+    .scrapbook {
+      position: relative;
+      min-height: 1100px;
+      padding: 20px 0 40px;
+    }
+
+    .scrapbook-stage {
+      position: relative;
+      width: 100%;
+      height: 1100px;
+    }
+
+    /* Each photo card */
+    .card {
+      position: absolute;
+      width: 175px;
+      background: linear-gradient(180deg, var(--paper-2), var(--paper));
+      padding: 10px 10px 16px;
+      border-radius: 8px;
+      box-shadow:
+        0 18px 35px rgba(0,0,0,0.35),
+        0 3px 10px rgba(0,0,0,0.18);
+      cursor: pointer;
+      transform-origin: center center;
+      opacity: 0;
+      animation:
+        attachIn 1s cubic-bezier(.2,.9,.2,1) forwards,
+        floatCard 5.5s ease-in-out infinite;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      will-change: transform;
+      overflow: hidden;
+    }
+
+    /* Hover effect for each card */
+    .card:hover {
+      z-index: 50 !important;
+      transform: scale(1.12) rotate(0deg) translateY(-6px) !important;
+      box-shadow:
+        0 22px 40px rgba(0,0,0,0.42),
+        0 6px 14px rgba(0,0,0,0.24);
+    }
+
+    /* Photo inside each card */
+    .card img {
+      width: 100%;
+      height: 205px;
+      object-fit: cover;
+      border-radius: 4px;
+      display: block;
+      background: #ddd;
+      transition: transform 0.35s ease;
+    }
+
+    .card:hover img {
+      transform: scale(1.12);
+    }
+
+    /* Person name */
+    .card-name {
+      text-align: center;
+      margin-top: 11px;
+      font-weight: 700;
+      font-size: 1rem;
+      color: #2c2622;
+    }
+
+    /* Small helper text */
+    .card-note {
+      text-align: center;
+      margin-top: 4px;
+      font-size: 0.82rem;
+      color: #7a6f67;
+    }
+
+    /* Hover caption */
+    .hover-caption {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 54px;
+      text-align: center;
+      font-family: "Brush Script MT", cursive;
+      font-size: 1.35rem;
+      color: #fff7f0;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.65);
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .card:hover .hover-caption {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Tape effect */
+    .card::before {
+      content: "";
+      position: absolute;
+      width: 64px;
+      height: 20px;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-6deg);
+      background: rgba(241, 216, 106, 0.72);
+      border-radius: 3px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+      z-index: 4;
+    }
+
+    /* Light reflection effect */
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.16), transparent 28%);
+      mix-blend-mode: soft-light;
+    }
+
+    /* Entry animation */
+    @keyframes attachIn {
+      0% {
+        opacity: 0;
+        transform:
+          translate(var(--startX), var(--startY))
+          rotate(calc(var(--rot) * 2.2))
+          scale(0.72);
+      }
+      72% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 1;
+        transform:
+          translate(0, 0)
+          rotate(var(--rot))
+          scale(1);
+      }
+    }
+
+    /* Small floating motion */
+    @keyframes floatCard {
+      0%, 100% {
+        transform:
+          translate(0, 0)
+          rotate(var(--rot))
+          scale(1);
+      }
+      50% {
+        transform:
+          translate(var(--floatX), var(--floatY))
+          rotate(calc(var(--rot) + var(--drift)))
+          scale(1.01);
+      }
+    }
+
+    /* Footer helper text */
+    .footer-tip {
+      margin-top: 10px;
+      text-align: center;
+      color: #bdaea1;
+      font-size: 0.95rem;
+      position: relative;
+      z-index: 3;
+    }
+
+    /* =========================
+       VIDEO MODAL
+       ========================= */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 8, 8, 0.88);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+      backdrop-filter: blur(2px);
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: #171717;
+      color: #fff;
+      width: auto;
+      max-width: 95vw;
+      max-height: 95vh;
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .modal-top {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .modal-title {
+      font-size: 1.15rem;
+      font-weight: bold;
+      color: #f4dce7;
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 12px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .btn-close {
+      background: #f0d5e1;
+      color: #6f4058;
+    }
+
+    .btn-close:hover {
+      background: #e7bfd0;
+    }
+
+    video {
+      width: auto;
+      height: auto;
+      max-width: 88vw;
+      max-height: 78vh;
+      border-radius: 14px;
+      background: black;
+      display: block;
+    }
+
+    .choice-modal-content {
+      width: min(520px, 92vw);
+      align-items: stretch;
+    }
+
+    .video-choice-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .video-choice-btn {
+      width: 100%;
+      border: none;
+      border-radius: 14px;
+      padding: 14px 16px;
+      background: #262626;
+      color: #f4dce7;
+      font-size: 1rem;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .video-choice-btn:hover {
+      background: #323232;
+      transform: translateY(-2px);
+    }
+    /* =========================
+       MUSIC HINT
+       ========================= */
+    .music-hint {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1001;
+      background: rgba(20, 20, 20, 0.82);
+      color: #f3d4e2;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .music-hint.hidden {
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+    }
+
+    /* =========================
+       RESPONSIVE STYLES
+       ========================= */
+    @media (max-width: 1200px) {
+      .scrapbook-stage {
+        height: auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 26px 18px;
+      }
+
+      .card {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        animation:
+          attachInMobile 0.9s ease forwards,
+          floatCard 5.5s ease-in-out infinite;
+      }
+
+      .corner-film {
+        width: 320px;
+        height: 90px;
+      }
+
+      .film-frame {
+        width: 105px;
+        height: 54px;
+      }
+
+      @keyframes attachInMobile {
+        from {
+          opacity: 0;
+          transform: translateY(50px) rotate(var(--rot)) scale(0.86);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) rotate(var(--rot)) scale(1);
+        }
+      }
+    }
+
+    @media (max-width: 700px) {
+      .header {
+        margin-top: 85px;
+      }
+
+      .header h1 {
+        font-size: 2.7rem;
+      }
+
+      .header p {
+        font-size: 0.95rem;
+      }
+
+      .card {
+        width: 155px;
+      }
+
+      .card img {
+        height: 180px;
+      }
+
+      .hover-caption {
+        font-size: 1.15rem;
+      }
+
+      .corner-film {
+        width: 240px;
+        height: 76px;
+      }
+
+      .film-frame {
+        width: 86px;
+        height: 42px;
+      }
+
+      video {
+        max-width: 92vw;
+        max-height: 72vh;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================
+       MAIN PAGE CONTENT
+       ========================= -->
+  <div class="container">
+
+    <!-- Top-left moving film strip -->
+    <div class="film-clip top-left">
+      <div class="corner-film">
+        <div class="film-track forward" id="filmTrackTop"></div>
+      </div>
+    </div>
+
+    <!-- Bottom-right moving film strip -->
+    <div class="film-clip bottom-right">
+      <div class="corner-film">
+        <div class="film-track backward" id="filmTrackBottom"></div>
+      </div>
+    </div>
+
+    <!-- Central title -->
+    <div class="header">
+      <h1>Happy Birthday Lihle 💕</h1>
+      <p>
+        A little scrapbook of love, memories, and messages from the people who care about you most.
+        Click any photo to open their birthday video.
+      </p>
+    </div>
+
+    <!-- All scrapbook cards render here -->
+    <div class="scrapbook">
+      <div class="scrapbook-stage" id="scrapbook"></div>
+    </div>
+
+    <!-- Helper text -->
+    <div class="footer-tip">
+      Hover a photo for a little note, then click to watch the message.
+    </div>
+  </div>
+
+  <!-- =========================
+       BACKGROUND MUSIC
+       ========================= -->
+  <audio id="bgMusic" autoplay loop>
+    <source src="media/music/Olivia_Dean_Lady_Lady.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <!-- Shown only if autoplay is blocked -->
+  <div id="musicHint" class="music-hint hidden">Click anywhere to play the music ♫</div>
+
+  <!-- =========================
+       VIDEO POPUP MODAL
+       ========================= -->
+    <div class="modal" id="choiceModal">
+      <div class="modal-content choice-modal-content">
+        <div class="modal-top">
+          <div class="modal-title" id="choiceModalTitle">Choose a Video</div>
+          <div class="modal-buttons">
+            <button class="btn btn-close" id="closeChoiceBtn">Back</button>
+          </div>
+        </div>
+
+        <div class="video-choice-list" id="videoChoiceList"></div>
+      </div>
+    </div>  
+  
+    <div class="modal" id="videoModal">
+    <div class="modal-content">
+      <div class="modal-top">
+        <div class="modal-title" id="modalTitle">Video Message</div>
+        <div class="modal-buttons">
+          <button class="btn btn-close" id="closeBtn">Back to Scrapbook</button>
+        </div>
+      </div>
+
+      <video id="birthdayVideo" controls>
+        <source id="videoSource" src="" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  </div>
+
+  <script>
+    /* =========================
+       DATA: PEOPLE / IMAGES / VIDEOS / CAPTIONS
+       ========================= */
+    const people = [
+      { name: "Aya", image: "media/images/Aya.jpeg", video: "media/videos/Aya.mp4"},
+      { name: "Buhle", image: "media/images/Buhle.jpeg", video: "media/videos/Buhle.mp4"},
+      { name: "Siya", image: "media/images/Siya.jpeg", video: "media/videos/Siya.mp4"},
+      { name: "Junior", image: "media/images/Junior.jpeg", video: "media/videos/Junior.mp4"},
+      { name: "Lebo", image: "media/images/Lebo.jpeg", video: "media/videos/Lebo.mp4"},
+      { name: "Naledi", image: "media/images/Naledi.jpeg", video: "media/videos/Naledi.mp4"},
+      { name: "TK", image: "media/images/TK.jpeg", video: "media/videos/TK.mp4"},
+      { name: "Sanele", image: "media/images/Sanele.jpeg", video: "media/videos/Sanele.mp4"},
+      { name: "Mom", image: "media/images/Mom.jpeg", video: "media/videos/Mom.mp4"},
+      { name: "Zaza", image: "media/images/Zaza.jpeg", video: "media/videos/Zaza.mp4"},
+      { name: "Cebo", image: "media/images/Cebo.jpeg", video: "media/videos/Cebo.mp4"},
+      { name: "Sis Lwazi and the Girls", 
+        image: "media/images/Sis_Lwazi.jpeg", 
+        videos: [
+          { label: "Sis Lwazi", file: "media/videos/Sis_Lwazi.mp4"},
+          { label: "Cece", file: "media/videos/Baby1.mp4"},
+          { label: "Cece (but louder)", file: "media/videos/Baby12.mp4"},
+          { label: "Namisa", file: "media/videos/Baby2.mp4"}
+        ]
+      }
+    ];
+
+    /* =========================
+       ELEMENT REFERENCES
+       ========================= */
+    const scrapbook = document.getElementById("scrapbook");
+    const filmTrackTop = document.getElementById("filmTrackTop");
+    const filmTrackBottom = document.getElementById("filmTrackBottom");
+
+    const modal = document.getElementById("videoModal");
+    const video = document.getElementById("birthdayVideo");
+    const videoSource = document.getElementById("videoSource");
+    const modalTitle = document.getElementById("modalTitle");
+    const closeBtn = document.getElementById("closeBtn");
+
+    const music = document.getElementById("bgMusic");
+    const musicHint = document.getElementById("musicHint");
+
+    const choiceModal = document.getElementById("choiceModal");
+    const choiceModalTitle = document.getElementById("choiceModalTitle");
+    const videoChoiceList = document.getElementById("videoChoiceList");
+    const closeChoiceBtn = document.getElementById("closeChoiceBtn");
+
+    /* Track whether music was already playing before a video opened */
+    let musicWasPlayingBeforeVideo = false;
+
+    /* =========================
+       CARD POSITIONS
+       ========================= */
+    const desktopPositions = [
+      { top: 200, left: 60,  rot: -10 },  // Aya
+      { top: 230, left: 220, rot: 7 },    // Buhle
+      { top: 200, left: 1050, rot: 9 },   // Siya
+      { top: 850, left: 520, rot: 6 },    // Junior
+
+      { top: 800, left: 950, rot: 8 },    // Lebo
+      { top: 820, left: 210, rot: -7 },   // Naledi
+      { top: 730, left: 800, rot: -9 },   // TK
+      { top: 700, left: 60, rot: 7 },     // Sanele
+
+      { top: 40, left: 460, rot: -6 },    // Mom
+      { top: 100, left: 900, rot: -8 },   // Zaza
+
+      { top: 40, left: 600, rot: 6 },     // Cebo
+      { top: 500, left: 1080, rot: 5 }    // Sis Lwazi
+    ];
+
+    /* Entry directions for the opening animation */
+    const startDirections = [
+      { x: -420, y: -180 },
+      { x: -250, y: 320 },
+      { x: 0, y: -320 },
+      { x: 260, y: 300 },
+      { x: 420, y: -180 },
+      { x: -460, y: 160 },
+      { x: -220, y: 360 },
+      { x: 0, y: 320 },
+      { x: 250, y: 340 },
+      { x: 440, y: 140 },
+      { x: -360, y: -220 },
+      { x: 360, y: 220 }
+    ];
+
+    /* Widths and heights for more natural variation */
+    const widths = [155, 165, 150, 162, 156, 166, 152, 160, 150, 164, 158, 162];
+    const heights = [185, 198, 182, 192, 186, 200, 180, 190, 182, 196, 188, 194];
+
+    /* =========================
+       FILM STRIP RENDERING
+       ========================= */
+    function createFilmStrip(trackEl) {
+      /* Duplicate the images so the reel loops smoothly */
+      const filmPhotos = [
+        ...people.map(person => person.image),
+        ...people.map(person => person.image)
+      ];
+
+      trackEl.innerHTML = filmPhotos.map(src => `
+        <div class="film-frame">
+          <img src="${src}" alt="">
+        </div>
+      `).join("");
+    }
+
+    /* =========================
+       SCRAPBOOK CARD RENDERING
+       ========================= */
+    function renderCards() {
+      scrapbook.innerHTML = "";
+
+      people.forEach((person, index) => {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        /* Position for this card */
+        const pos = desktopPositions[index] || {
+          top: 60 + (index * 35),
+          left: 60 + (index * 60),
+          rot: (index % 2 === 0 ? -4 : 4)
+        };
+
+        /* Entry direction for animation */
+        const start = startDirections[index] || { x: -300, y: -200 };
+
+        /* Small floating movement settings */
+        const floatX = (index % 2 === 0 ? 2 : -2) + "px";
+        const floatY = (index % 3 === 0 ? -3 : -2) + "px";
+        const drift = (index % 2 === 0 ? 0.7 : -0.7) + "deg";
+
+        /* Apply positioning and animation variables */
+        card.style.top = pos.top + "px";
+        card.style.left = pos.left + "px";
+        card.style.zIndex = index + 1;
+        card.style.width = (widths[index] || 170) + "px";
+        card.style.setProperty("--rot", pos.rot + "deg");
+        card.style.setProperty("--startX", start.x + "px");
+        card.style.setProperty("--startY", start.y + "px");
+        card.style.setProperty("--floatX", floatX);
+        card.style.setProperty("--floatY", floatY);
+        card.style.setProperty("--drift", drift);
+        card.style.animationDelay = `${index * 0.16}s, ${1 + index * 0.16}s`;
+
+        /* Card content */
+        card.innerHTML = `
+          <img src="${person.image}" alt="${person.name}" style="height:${heights[index] || 200}px;">
+          <div class="hover-caption">${person.caption || ""}</div>
+          <div class="card-name">${person.name}</div>
+          <div class="card-note">Click to watch</div>
+        `;
+
+        /* Open this person's video on click */
+        card.addEventListener("click", () => {
+          if (person.videos && Array.isArray(person.videos)) {
+            openChoiceModal(person);
+          } else {
+            openVideo(person);
+          }
+        });
+
+        scrapbook.appendChild(card);
+      });
+    }
+
+    /* =========================
+       VIDEO SIZE HANDLING
+       ========================= */
+    video.addEventListener("loadedmetadata", () => {
+      const isPortrait = video.videoHeight > video.videoWidth;
+
+      if (isPortrait) {
+        video.style.maxWidth = "62vw";
+        video.style.maxHeight = "82vh";
+      } else {
+        video.style.maxWidth = "88vw";
+        video.style.maxHeight = "78vh";
+      }
+    });
+
+    /* =========================
+       MUSIC HELPERS
+       ========================= */
+
+    /* Start background music quietly */
+    music.volume = 0.25;
+
+    /* Fade music to a target volume over time */
+    function fadeMusic(targetVolume, duration = 500) {
+      const startVolume = music.volume;
+      const volumeChange = targetVolume - startVolume;
+      const steps = 20;
+      const stepTime = duration / steps;
+      let currentStep = 0;
+
+      const fadeInterval = setInterval(() => {
+        currentStep++;
+        music.volume = Math.max(
+          0,
+          Math.min(1, startVolume + (volumeChange * currentStep / steps))
+        );
+
+        if (currentStep >= steps) {
+          clearInterval(fadeInterval);
+
+          /* If fully faded out, pause it */
+          if (targetVolume === 0) {
+            music.pause();
+          }
+        }
+      }, stepTime);
+    }
+
+    /* Try to start music */
+    function startMusic() {
+      music.play()
+        .then(() => {
+          musicHint.classList.add("hidden");
+        })
+        .catch(() => {
+          musicHint.classList.remove("hidden");
+        });
+    }
+
+    /* Try autoplay once page loads */
+    function setupMusicAutoplay() {
+      music.play()
+        .then(() => {
+          /* Autoplay worked, hide hint */
+          musicHint.classList.add("hidden");
+        })
+        .catch(() => {
+          /* Autoplay blocked, show hint */
+          musicHint.classList.remove("hidden");
+
+          /* Start music on first click anywhere */
+          document.addEventListener("click", () => {
+            startMusic();
+          }, { once: true });
+        });
+    }
+
+    /* =========================
+       VIDEO OPEN / CLOSE
+       ========================= */
+    function openVideo(person) {
+      modalTitle.textContent = `${person.name}'s Message`;
+
+      /* Remember whether music was playing */
+      musicWasPlayingBeforeVideo = !music.paused;
+
+      /* Fade music out if it was playing */
+      if (musicWasPlayingBeforeVideo) {
+        fadeMusic(0, 400);
+      }
+
+      /* Load and open the selected video */
+      video.pause();
+      videoSource.src = person.video;
+      video.load();
+      modal.classList.add("active");
+
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          console.log("Video autoplay blocked:", error);
+        });
+      }
+    }
+
+    function closeVideo() {
+      video.pause();
+      video.currentTime = 0;
+      modal.classList.remove("active");
+
+      /* Resume music if it was previously playing */
+      if (musicWasPlayingBeforeVideo) {
+        music.volume = 0;
+        music.play()
+          .then(() => {
+            fadeMusic(0.25, 400);
+          })
+          .catch(() => {
+            console.log("Music resume blocked.");
+          });
+      }
+    }
+
+    /* =========================
+       EVENT LISTENERS
+       ========================= */
+    closeBtn.addEventListener("click", closeVideo);
+
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        closeVideo();
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeVideo();
+      }
+    });
+
+    closeChoiceBtn.addEventListener("click", closeChoiceModal);
+
+    choiceModal.addEventListener("click", (e) => {
+      if (e.target === choiceModal) {
+        closeChoiceModal();
+      }
+    });
+
+    /* =========================
+       INITIAL PAGE SETUP
+       ========================= */
+    createFilmStrip(filmTrackTop);
+    createFilmStrip(filmTrackBottom);
+    renderCards();
+    setupMusicAutoplay();
+
+    /* =========================
+       VIDEO CHOICE MODAL (for people with multiple videos)
+       ========================= */
+    function openChoiceModal(person) {
+      choiceModalTitle.textContent = `${person.name}'s Videos`;
+      videoChoiceList.innerHTML = "";
+
+      person.videos.forEach(item => {
+        const btn = document.createElement("button");
+        btn.className = "video-choice-btn";
+        btn.textContent = item.label;
+
+        btn.addEventListener("click", () => {
+          choiceModal.classList.remove("active");
+          openVideo({
+            name: item.label,
+            video: item.file
+          });
+        });
+
+        videoChoiceList.appendChild(btn);
+      });
+
+      choiceModal.classList.add("active");
+    }
+
+    function closeChoiceModal() {
+      choiceModal.classList.remove("active");
+    }
+  </script>
+</body>
+</html>
